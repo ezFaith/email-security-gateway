@@ -81,7 +81,7 @@ if st.button("Analyze Email", use_container_width=True):
         ]
         keyword_matches = [word for word in phishing_keywords if word in email_text.lower()]
         if keyword_matches:
-            reasons.append(f"• Suspicious keywords found: {', '.join(keyword_matches)}.")
+            reasons.append(f"Suspicious keywords found: {', '.join(keyword_matches)}.")
             final_status = "Phishing Detected"
 
         # 2. Machine Learning Model Analysis (Email Body)
