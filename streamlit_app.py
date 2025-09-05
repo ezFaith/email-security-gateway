@@ -120,7 +120,7 @@ if st.button("Analyze Email", use_container_width=True):
                     url_status_display = "Phishing (Model-Based)"
                     url_phishing_count += 1
                 
-                reasons.append(f"- URL: {url} -> Status: {url_status_display}")
+                reasons.append(f"URL: {url} -> Status: {url_status_display}")
         
         # Final decision based on combined analysis
         if url_phishing_count > 0:
