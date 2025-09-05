@@ -106,20 +106,23 @@ def analyze_email():
     email_prediction = email_model.predict(email_text_processed)[0]
     email_prediction_proba = email_model.predict_proba(email_text_processed)[0]
     
+    confidence = email_prediction_proba[1] if email_prediction == 1 else email_prediction_proba[0]
+    confidence_percent = round(confidence * 100, 0)
+
     if email_prediction == 1:
-        reasons.append(f"Content analysis model predicts: Phishing (Confidence: {email_prediction_proba[1]:.2f}).")
+        reasons.append(f"Content analysis model predicts: Phishing (Confidence: {confidence_percent} %).")
         final_status = "Phishing Detected"
     else:
-        reasons.append(f"Content analysis model predicts: Safe (Confidence: {email_prediction_proba[0]:.2f}).")
+        reasons.append(f"Content analysis model predicts: Safe (Confidence: {confidence_percent} %).")
     
     # 3. URL Analysis
     urls_found = url_extractor.find_urls(email_text)
     if urls_found:
         reasons.append("URL Analysis:")
         for url in urls_found:
+            # First, use your local ML model and rule-based check
             url_features = get_url_features(url)
             url_prediction = url_model.predict(url_features)[0]
-            
             url_label = url_label_encoder.inverse_transform([url_prediction])[0]
             
             tld = url.split('//')[-1].split('/')[0].split('.')[-1]

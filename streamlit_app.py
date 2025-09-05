@@ -71,16 +71,18 @@ if st.button("Analyze Email", use_container_width=True):
         email_prediction = email_model.predict(email_text_processed)[0]
         email_prediction_proba = email_model.predict_proba(email_text_processed)[0]
         
+        confidence = email_prediction_proba[1] if email_prediction == 1 else email_prediction_proba[0]
+        confidence_percent = round(confidence * 100, 0)
+
         if email_prediction == 1:
-            reasons.append(f"Content analysis model predicts: Phishing (Confidence: {email_prediction_proba[1]:.2f}).")
+            reasons.append(f"Content analysis model predicts: Phishing (Confidence: {confidence_percent} %).")
             final_status = "Phishing Detected"
         else:
-            reasons.append(f"Content analysis model predicts: Safe (Confidence: {email_prediction_proba[0]:.2f}).")
+            reasons.append(f"Content analysis model predicts: Safe (Confidence: {confidence_percent} %).")
         
         # 3. URL Analysis
         urls_found = re.findall(r'https?://\S+', email_text)
         if urls_found:
-            reasons.append("---")
             reasons.append("URL Analysis:")
             for url in urls_found:
                 url_features = get_url_features(url)
@@ -100,11 +102,10 @@ if st.button("Analyze Email", use_container_width=True):
                     url_status_display = "Phishing (Model-Based)"
                     url_phishing_count += 1
                 
-                reasons.append(f"- URL: {url} -> Status: {url_status_display}")
+                reasons.append(f"URL: {url} -> Status: {url_status_display}")
         
         # Final decision based on combined analysis
         if url_phishing_count > 0:
-            reasons.append("---")
             reasons.append(f"Final Conclusion: {url_phishing_count} suspicious URL(s) detected. ")
             final_status = "Phishing Detected"
 
