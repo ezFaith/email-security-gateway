@@ -99,7 +99,7 @@ if st.button("Analyze Email", use_container_width=True):
             reasons.append(f"Content analysis model predicts: Safe (Confidence: {confidence_percent} %).")
         
         # 3. URL Analysis
-        urls_found = url_extractor.find_urls(email_text)
+        urls_found = re.findall(r'https?://\S+', email_text)
         if urls_found:
             reasons.append("URL Analysis:")
             for url in urls_found:
