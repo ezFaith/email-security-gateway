@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Security Gateway</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .main-container {
+            min-height: calc(100vh - 8rem);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen font-sans antialiased flex flex-col items-center justify-center p-6">
+    <div class="main-container bg-white shadow-2xl rounded-xl p-12 max-w-7xl w-full text-center">
+        <h1 class="text-5xl font-extrabold text-gray-900 mb-4">
+            Email Security Gateway
+        </h1>
+        <p class="text-lg text-gray-600 mb-12">
+            Paste an email below to check for potential phishing threats.
+        </p>
+
+        <form id="email-form" class="space-y-8">
+            <textarea
+                name="email_content"
+                rows="8"
+                placeholder="Paste the full email here (including headers and body)..."
+                class="w-full p-8 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500 transition-colors text-base"
+                required
+            ></textarea>
+            <button
+                type="submit"
+                class="mt-10 w-full bg-blue-600 text-white font-semibold py-5 px-10 rounded-xl shadow-md hover:bg-blue-700 transition-colors transform hover:scale-105"
+            >
+                Analyze Email
+            </button>
+        </form>
+
+        <div id="results-container" class="hidden mt-12 w-full">
+            <div id="loading-spinner" class="text-center p-4">
+                <i class="fas fa-spinner fa-spin fa-2x text-blue-500"></i>
+                <p class="text-gray-500 mt-2">Analyzing email...</p>
+            </div>
+            
+            <div id="analysis-report" class="bg-gray-50 p-8 rounded-xl border border-gray-200 text-left">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold">Final Verdict</h2>
+                    <span id="verdict-icon" class="text-3xl"></span>
+                </div>
+                
+                <ul id="reasons-list" class="list-disc list-inside space-y-3 text-gray-700 text-base">
+                    </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-16 text-center text-gray-600">
+        <p class="text-sm">Built by Dipankar Saha</p>
+        <div class="mt-4 space-x-6">
+            <a href="https://github.com/ezFaith" target="_blank" class="text-gray-600 hover:text-gray-800 transition-colors">
+                <i class="fab fa-github fa-2x"></i>
+            </a>
+            <a href="https://linkedin.com/in/dipankarsaha2001" target="_blank" class="text-gray-600 hover:text-blue-700 transition-colors">
+                <i class="fab fa-linkedin fa-2x"></i>
+            </a>
+            <a href="https://ezfaith.github.io/portfolio/" target="_blank" class="text-gray-600 hover:text-purple-600 transition-colors">
+                <i class="fas fa-briefcase fa-2x"></i>
+            </a>
+        </div>
+    </footer>
+    
+    <script>
+        document.getElementById('email-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const form = e.target;
+            const emailText = form.elements['email_content'].value;
+            
+            const resultsContainer = document.getElementById('results-container');
+            const analysisReport = document.getElementById('analysis-report');
+            const loadingSpinner = document.getElementById('loading-spinner');
+            const reasonsList = document.getElementById('reasons-list');
+            const verdictIcon = document.getElementById('verdict-icon');
+
+            resultsContainer.classList.remove('hidden');
+            analysisReport.classList.add('hidden');
+            loadingSpinner.classList.remove('hidden');
+            reasonsList.innerHTML = '';
+
+            try {
+                const response = await fetch('/analyze_email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email_content: emailText })
+                });
+
+                const data = await response.json();
+                console.log(data); // This will show you the exact data from the server
+
+                loadingSpinner.classList.add('hidden');
+                analysisReport.classList.remove('hidden');
+
+                if (data.status === 'Phishing Detected') {
+                    verdictIcon.innerHTML = '⚠️';
+                    verdictIcon.classList.remove('text-green-500');
+                    verdictIcon.classList.add('text-yellow-500');
+                    analysisReport.classList.remove('border-green-200');
+                    analysisReport.classList.add('border-yellow-200');
+                } else {
+                    verdictIcon.innerHTML = '✅';
+                    verdictIcon.classList.remove('text-yellow-500');
+                    verdictIcon.classList.add('text-green-500');
+                    analysisReport.classList.remove('border-yellow-200');
+                    analysisReport.classList.add('border-green-200');
+                }
+                
+                data.reasons.forEach(reason => {
+                    const li = document.createElement('li');
+                    li.textContent = reason;
+                    reasonsList.appendChild(li);
+                });
+
+            } catch (error) {
+                console.error('Error:', error);
+                loadingSpinner.classList.add('hidden');
+                analysisReport.classList.remove('hidden');
+                verdictIcon.innerHTML = '❌';
+                verdictIcon.classList.add('text-red-500');
+                reasonsList.innerHTML = `<li>An error occurred during analysis. Please check the server logs.</li>`;
+            }
+        });
+    </script>
+</body>
+</html>
