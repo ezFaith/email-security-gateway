@@ -145,13 +145,13 @@ st.markdown("""
 <div class="mt-16 text-center text-gray-600">
     <p class="text-sm">Built by Dipankar Saha</p>
     <div class="mt-4 space-x-6">
-        <a href="https://github.com/ezFaith" target="_blank" class="text-gray-600 hover:text-gray-800 transition-colors">
+        <a href="https://github.com/ezFaith" target="_blank" class="text-gray-600 hover:text-gray-400 transition-colors">
             <i class="fab fa-github fa-2x"></i>
         </a>
-        <a href="https://linkedin.com/in/dipankarsaha2001" target="_blank" class="text-gray-600 hover:text-blue-700 transition-colors">
+        <a href="https://linkedin.com/in/dipankarsaha2001" target="_blank" class="text-gray-600 hover:text-blue-400 transition-colors">
             <i class="fab fa-linkedin fa-2x"></i>
         </a>
-        <a href="https://ezfaith.github.io/portfolio/" target="_blank" class="text-gray-600 hover:text-purple-600 transition-colors">
+        <a href="https://ezfaith.github.io/portfolio/" target="_blank" class="text-gray-600 hover:text-purple-400 transition-colors">
             <i class="fas fa-briefcase fa-2x"></i>
         </a>
     </div>
