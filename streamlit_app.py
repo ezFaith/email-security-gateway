@@ -3,6 +3,7 @@ import joblib
 import pandas as pd
 import re
 import os
+from urlextract import URLExtract
 
 # --- Helper Functions (matching app.py and url_training.py) ---
 
@@ -39,8 +40,25 @@ email_model, tfidf_vectorizer, url_model, url_label_encoder = load_models()
 
 st.set_page_config(page_title="Email Security Gateway", page_icon="📧", layout="wide")
 
+# Inject custom CSS for a cleaner look and feel, including Tailwind-like classes
+st.markdown("""
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    html, body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f3f4f6;
+    }
+    .main-container {
+        max-width: 900px;
+        margin: auto;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+
 st.title("📧 Email Security Gateway")
-st.markdown("---")
 st.markdown("### Paste an email below to check for potential phishing threats.")
 
 email_text = st.text_area("Email Content", height=300, placeholder="Paste the full email here...")
@@ -102,7 +120,7 @@ if st.button("Analyze Email", use_container_width=True):
                     url_status_display = "Phishing (Model-Based)"
                     url_phishing_count += 1
                 
-                reasons.append(f"URL: {url} -> Status: {url_status_display}")
+                reasons.append(f"- URL: {url} -> Status: {url_status_display}")
         
         # Final decision based on combined analysis
         if url_phishing_count > 0:
@@ -120,3 +138,22 @@ if st.button("Analyze Email", use_container_width=True):
         st.markdown("#### Detailed Breakdown:")
         for reason in reasons:
             st.markdown(f"- {reason}")
+
+# --- Footer ---
+st.markdown("---")
+st.markdown("""
+<div class="mt-16 text-center text-gray-600">
+    <p class="text-sm">Built by Dipankar Saha</p>
+    <div class="mt-4 space-x-6">
+        <a href="https://github.com/ezFaith" target="_blank" class="text-gray-600 hover:text-gray-800 transition-colors">
+            <i class="fab fa-github fa-2x"></i>
+        </a>
+        <a href="https://linkedin.com/in/dipankarsaha2001" target="_blank" class="text-gray-600 hover:text-blue-700 transition-colors">
+            <i class="fab fa-linkedin fa-2x"></i>
+        </a>
+        <a href="https://ezfaith.github.io/portfolio/" target="_blank" class="text-gray-600 hover:text-purple-600 transition-colors">
+            <i class="fas fa-briefcase fa-2x"></i>
+        </a>
+    </div>
+</div>
+""", unsafe_allow_html=True)
