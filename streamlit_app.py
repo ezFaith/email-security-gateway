@@ -124,6 +124,7 @@ if st.button("Analyze Email", use_container_width=True):
         
         # Final decision based on combined analysis
         if url_phishing_count > 0:
+            reasons.append("---")
             reasons.append(f"Final Conclusion: {url_phishing_count} suspicious URL(s) detected. ")
             final_status = "Phishing Detected"
 
@@ -148,10 +149,10 @@ st.markdown("""
         <a href="https://github.com/ezFaith" target="_blank" class="text-gray-600 hover:text-gray-800 transition-colors">
             <i class="fab fa-github fa-2x"></i>
         </a>
-        <a href="https://linkedin.com/in/dipankarsaha2001" target="_blank" class="text-gray-600 hover:text-blue-700 transition-colors">
+        <a href="https://linkedin.com/in/dipankarsaha2001" target="_blank" class="text-gray-600 hover:text-gray-700 transition-colors">
             <i class="fab fa-linkedin fa-2x"></i>
         </a>
-        <a href="https://ezfaith.github.io/portfolio/" target="_blank" class="text-gray-600 hover:text-purple-600 transition-colors">
+        <a href="https://ezfaith.github.io/portfolio/" target="_blank" class="text-gray-600 hover:text-gray-600 transition-colors">
             <i class="fas fa-briefcase fa-2x"></i>
         </a>
     </div>
