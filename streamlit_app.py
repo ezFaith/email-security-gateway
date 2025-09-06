@@ -129,31 +129,30 @@ if st.button("Analyze Email", use_container_width=True):
             final_status = "Phishing Detected"
 
         # --- Display Results ---
-st.markdown("---")
-st.markdown("### Analysis Results")
+        st.markdown("---")
+        st.markdown("### Analysis Results")
+        if final_status == "Phishing Detected":
+            st.markdown(
+                f"""
+                <div style="padding: 2rem; background-color: #ffcccc; border-radius: 0.5rem; text-align: center;">
+                    <p style="font-size: 1.5rem; font-weight: bold; color: #cc0000;">⚠️ Phishing Detected</p>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+        else:
+            st.markdown(
+                f"""
+                <div style="padding: 2rem; background-color: #ccffcc; border-radius: 0.5rem; text-align: center;">
+                    <p style="font-size: 1.5rem; font-weight: bold; color: #008000;">✅ Safe Email</p>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
 
-if final_status == "Phishing Detected":
-    st.markdown(
-        f"""
-        <div style="padding: 2rem; background-color: #ffcccc; border-radius: 0.5rem; text-align: center;">
-            <p style="font-size: 1.5rem; font-weight: bold; color: #cc0000;">⚠️ Phishing Detected</p>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-else:
-    st.markdown(
-        f"""
-        <div style="padding: 2rem; background-color: #ccffcc; border-radius: 0.5rem; text-align: center;">
-            <p style="font-size: 1.5rem; font-weight: bold; color: #008000;">✅ Safe Email</p>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
-st.markdown("#### Detailed Breakdown:")
-for reason in reasons:
-    st.markdown(f"- {reason}")
+        st.markdown("#### Detailed Breakdown:")
+        for reason in reasons:
+            st.markdown(f"- {reason}")
 
 # --- Footer ---
 st.markdown("---")
